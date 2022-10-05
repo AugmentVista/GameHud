@@ -8,132 +8,141 @@ namespace GameHud
 {
     internal class Program
     {
+            static int Chieftain = 80;
+            static int score = 0;
+            static int health = 100;
+            static int shields = 100;
+            static int lives = 3;
+            static int kobolds = 8;
+        static int koboldHealth = kobolds * 10; 
+        static int level = 1; 
+            static Random rnd = new Random();
+            static int eightDie = rnd.Next(1, 9);
+            static int tweleveDie = rnd.Next(1, 13);
+            static int playerdamage = eightDie * 2;
+           
+            
 
 
-
-
-        static void Main(string[] args)
+        // when i moved the methods to the bottom I got an error I didn't know how to fix so they stay up top for now. 
+        static void KoboldsAttack()
         {
-            Console.WriteLine("                                              Gaslight Studios                            ");
-            Console.WriteLine();
-            Console.WriteLine();
-            Console.WriteLine("////////////////////////////////////////// Get hit. //////////////////////////////////////////////////////////////");
-            Console.WriteLine();
-            Console.WriteLine();
-            Console.WriteLine();
-            Console.WriteLine();
+             
+            shields = shields - (kobolds * eightDie);
+            Console.WriteLine("the kobolds charge you. their strikes are weak but numerous dealing   " + kobolds * eightDie + "  Damage");
             Console.ReadKey(true);
+            if (lives < 0)
+            {
+                Console.WriteLine("YOU LOSE THE GAME");
+                Environment.Exit(1);
+            }
 
-            int score = 0;
-            int health = 100;
-            int shields = 100;
-            int lives = 3;
-            int kobolds = 8;
-            Random rnd = new Random();
-            int eightDie = rnd.Next(1, 9);
-            int tweleveDie = rnd.Next(1, 12);
-
-
-
-            // so i want the score mult to increase with the number of kobolds slain, with 8 i could go for a quad multiplier so then I'd need to increment the score mult by 1 + 1 per 2 kobolds dead? 
-
-
+            if (shields < 1)
+            {
+                health = health + shields;
+            }
             if (health < 0)
             {
                 lives = lives - 1;
                 Console.WriteLine("You lost a life");
-                health = 100;
             }
+            Console.Clear();
+        }
 
 
+
+        static void cheiftainAttack()
+        {
+
+            shields = shields - tweleveDie * 2;
+            Console.ReadKey(true);
+            Console.WriteLine("The kobold Chieftain hits you with his mace");
             if (lives < 0)
             {
                 Console.WriteLine("YOU LOSE THE GAME");
+                Environment.Exit(1);
             }
 
-            while (shields < 0)
+            if (shields < 1)
             {
-                health = shields + health;
+                health = health + shields;
+            }
+            if (health < 0)
+            {
+                lives = lives - 1;
+                Console.WriteLine("You lost a life");
+            Console.Clear();
+            }
+        }
+
+
+
+        static void GameHud()
+        {
+            score = score + ((8 - kobolds) * 100);
+            if (level < 2)
+            {
+                score = score + ((8 - kobolds) * 200);
+            }
+            Console.WriteLine("|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||");
+            Console.WriteLine();
+            Console.WriteLine("| Health " + health + "| Shields " + shields + "| Score " + score + "| Lives " + lives + "| Level " + level);
+            Console.WriteLine();
+            Console.WriteLine();
+            Console.WriteLine();
+            Console.WriteLine("|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||");
+            
+            Console.ReadKey(true);
+            Console.Clear();     }
+
+
+
+            static void playerAttack()
+            {
+           
+                koboldHealth = koboldHealth - playerdamage;
+                if (koboldHealth < 80)
+            {
+                koboldHealth = koboldHealth - playerdamage;
+                 if   (koboldHealth < 0)
+                {
+                    kobolds = 0;
+                    level = 2;
+                    Chieftain = Chieftain - playerdamage;
+
+                    Console.WriteLine("you swing your blade slashing your enemy dealing   " + playerdamage + "  Damage");
+                    Console.WriteLine("There are none that remain");
+                    Console.Clear(); }
 
             }
 
 
+        }
+        static void Main(string[] args)
+        {
+           
 
+            
+
+
+            
+            
             Console.WriteLine("You've taken the initiative, 8 Kobolds stand before you.");
-            Console.WriteLine();
-            Console.WriteLine("Your blade comes down hard agianst the neck of the first to approach you, it crumbles onto the ground.");
-            Console.WriteLine("                                + 100 points! , 7 kobolds remain.                     ");
             Console.ReadKey(true);
-            kobolds = kobolds - 1;
-            score = score + 100;
-
-
-
-
-
-            Console.WriteLine("The remaining kobolds charge you. their strikes are weak but numerous");
-            Console.WriteLine();
-            Console.WriteLine("They stab any claw at you dealing damage to your shields");
-            Console.WriteLine();
-            Console.WriteLine("                                     ALERT, ALERT, ALERT. SHIELDS DAMAGED");
-            shields = shields - (kobolds * eightDie);
-            Console.WriteLine("Shields:");
-            Console.WriteLine(shields);
-            Console.WriteLine("Health:");
-            Console.WriteLine(health);
-            Console.ReadKey(true);
-
-
-
-            Console.WriteLine("The remaining kobolds charge you. their strikes are weak but numerous");
-            Console.WriteLine();
-            Console.WriteLine("With clever tactics they all attack you at once");
-            Console.WriteLine();
-            Console.WriteLine("                                     ALERT, ALERT, ALERT. SHIELDS DAMAGED");
-            shields = shields - (kobolds * eightDie);
-
-            while (shields < 0)
+            Console.Clear();
+            while (kobolds > 0)
             {
-                health = shields + health;
-                Console.WriteLine("Zero Shields Remaining:");
-
+                playerAttack();
+                GameHud();
+                KoboldsAttack();
+                GameHud();
             }
-
-            Console.WriteLine("Health:");
-            Console.WriteLine(health);
-            Console.ReadKey(true);
-            kobolds = kobolds - 1;
-            score = score + 100;
-
-
-
-
-
-            Console.WriteLine("  With a heavy swing of your blade you catch two kobolds by their waists, cleaving them in half");
-            kobolds = kobolds - 2;
-            score = score + 200;
-            Console.WriteLine("Multikill!                        + 200 points! ");
-            Console.WriteLine();
-            Console.WriteLine("Enraged by their fallen breathen, all 5 kobolds wildly swing thier blades at you");
-            shields = shields - (kobolds * eightDie);
-            Console.WriteLine("                                     ALERT, ALERT, ALERT. SHIELDS DAMAGED");
-            Console.WriteLine();
-            Console.WriteLine("Shields:");
-            Console.WriteLine(shields);
-            Console.WriteLine("Health:");
-            Console.WriteLine(health);
-            Console.ReadKey(true);
-
-            Console.WriteLine("As their numbers dwindle, they begin to scatter in several directions, the least fortunate of them runs right into you, it's actions rewarded with a blade through it's back. + 100 points!");
-            Console.WriteLine("The remaining Kobolds escape");
-            kobolds = kobolds - 1;
-            score = score + 100;
-            int fallenKobolds = 8 - kobolds;
-            int bonusScore = fallenKobolds + (shields / 10) * 200;
-            int levelScore = score + bonusScore;
+           
+           
+          
             Console.WriteLine("                                                    Level 1: Burrows Complete, Score:");
-            Console.WriteLine(levelScore);
             Console.ReadKey(true);
+            Console.Clear();
             Console.WriteLine();
             Console.WriteLine();
             Console.WriteLine("Remaining Health");
@@ -142,60 +151,35 @@ namespace GameHud
             Console.WriteLine(shields);
             Console.WriteLine("Remaining Lives");
             Console.WriteLine(lives);
+            Console.WriteLine();
+            Console.Clear();
+
+            Console.WriteLine("                                                         WELCOME TO LEVEL 2                           ");
+            health = health + 100;
+            shields = 50;
+            Console.WriteLine("That should be enough to survive");
+            GameHud(); 
             Console.ReadKey(true);
 
             Console.WriteLine("                                                     Level 2: Chieftain's Lair");
             Console.WriteLine();
-            Console.WriteLine("                                                            Shields restored ");
-            shields = 100;
+            
 
-            Console.WriteLine("The kobold Chieftain stands towering over you, equipped with a mace the size of your person");
-            Console.WriteLine("The kobold Chieftain swings his mace crashing against your chest");
-            shields = shields - tweleveDie * 15;
-            Console.WriteLine("                                     ALERT, ALERT, ALERT. SHIELDS DAMAGED");
-            Console.WriteLine("Remaining shields");
-            Console.WriteLine(shields);
-            Console.WriteLine("Not yet finished, the Chieftain hurls a bolt of fire engulfing your head with momentary flames bypassing your shields");
-            health = health - tweleveDie * 5;
-            Console.WriteLine("Remaining health");
-            Console.WriteLine(health);
-            Console.ReadKey(true);
+            Console.WriteLine("The kobold Chieftain stands towering over you, it strikes first.");
+            while (Chieftain > 0)
+            {
+                playerAttack();
+                GameHud();
+                cheiftainAttack();
+                GameHud();
+            }
 
-
-
-            Console.WriteLine(" Recovering from the assault, your blade finds it's way across it's neck leaving a large wound");
-            Console.WriteLine();
-
-            Console.ReadKey(true);
-            int Chieftain = 80;
-
-            Chieftain = Chieftain - tweleveDie * 6;
-            Console.WriteLine("Chieftain health Remaining");
-            Console.WriteLine(Chieftain);
-            Console.ReadKey(true);
-
-
-            Console.WriteLine("The kobold Chieftain swings his mace over your head");
-            shields = shields - tweleveDie * 15;
-            Console.WriteLine("                                     ALERT, ALERT, ALERT. SHIELDS DAMAGED");
-            Console.WriteLine("Remaining shields");
-            Console.WriteLine(shields);
-            Console.WriteLine(health);
-            Console.ReadKey(true);
-
-            Console.WriteLine(" You slash at the creature for a killing blow");
-            Console.WriteLine();
-
-            Console.ReadKey(true);
-
-            Chieftain = Chieftain - 80;
-            Console.WriteLine("Chieftain health Remaining");
-            Console.WriteLine(Chieftain);
-            Console.ReadKey(true);
 
             if (Chieftain < 0) 
             {
-                Console.WriteLine("YOU WIN"); 
+                Console.WriteLine("///////////////////////////YOU WIN/////////////////////////////");
+                Console.ReadKey(true);
+                
             }
 ; 
 
