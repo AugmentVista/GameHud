@@ -14,41 +14,37 @@ namespace GameHud
             static int shields = 100;
             static int lives = 3;
             static int kobolds = 8;
-        static int koboldHealth = kobolds * 10; 
-        static int level = 1; 
+            static int koboldHealth = kobolds * 10; 
+            static int level = 1; 
             static Random rnd = new Random();
             static int eightDie = rnd.Next(1, 9);
             static int tweleveDie = rnd.Next(1, 13);
             static int playerdamage = eightDie * 2;
            
-            
-
-
-        // when i moved the methods to the bottom I got an error I didn't know how to fix so they stay up top for now. 
+       
         static void KoboldsAttack()
-        {
-             
-            shields = shields - (kobolds * eightDie);
-            Console.WriteLine("the kobolds charge you. their strikes are weak but numerous dealing   " + kobolds * eightDie + "  Damage");
+        {          
+             shields = shields - (kobolds * eightDie);
+            Console.WriteLine("they smack you   " + (kobolds * eightDie) + "  Damage");
             Console.ReadKey(true);
-            if (lives < 0)
+            Death();
+            if (shields <= 0)
             {
-                Console.WriteLine("YOU LOSE THE GAME");
-                Environment.Exit(1);
+                health += shields;
+                shields = 0;
             }
-
-            if (shields < 1)
-            {
-                health = health + shields;
-            }
-            if (health < 0)
-            {
-                lives = lives - 1;
-                Console.WriteLine("You lost a life");
-            }
+            
             Console.Clear();
         }
+        static void Death()
+        {
+            if (lives >= 0)
+                Console.WriteLine("YOU LOSE THE GAME");
+            Environment.Exit(1);
+        }
 
+
+      
 
 
         static void cheiftainAttack()
@@ -56,20 +52,16 @@ namespace GameHud
 
             shields = shields - tweleveDie * 2;
             Console.ReadKey(true);
-            Console.WriteLine("The kobold Chieftain hits you with his mace");
-            if (lives < 0)
+            Console.WriteLine("you get hit again by big boi");
+            Death();
+            if (shields <= 0)
             {
-                Console.WriteLine("YOU LOSE THE GAME");
-                Environment.Exit(1);
+                health += shields;
+                shields = 0;
             }
-
-            if (shields < 1)
-            {
-                health = health + shields;
-            }
-            if (health < 0)
             {
                 lives = lives - 1;
+                health = 100;
                 Console.WriteLine("You lost a life");
             Console.Clear();
             }
@@ -84,13 +76,12 @@ namespace GameHud
             {
                 score = score + ((8 - kobolds) * 200);
             }
-            Console.WriteLine("|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||");
-            Console.WriteLine();
-            Console.WriteLine("| Health " + health + "| Shields " + shields + "| Score " + score + "| Lives " + lives + "| Level " + level);
-            Console.WriteLine();
-            Console.WriteLine();
-            Console.WriteLine();
-            Console.WriteLine("|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||");
+            Console.WriteLine("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+            Console.WriteLine("~~~~~~~~~~~                                                                             ~~~~~~~~~~~~~~~~~");
+            Console.WriteLine("              | Health " + health + "    | Shields " + shields + "    | Score " + score + "    | Lives " + lives + "    | Level " + level + "      ");
+            Console.WriteLine("~~~~~~~~~~~                                                                             ~~~~~~~~~~~~~~~~~");
+            Console.WriteLine("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+        
             
             Console.ReadKey(true);
             Console.Clear();     }
@@ -99,35 +90,24 @@ namespace GameHud
 
             static void playerAttack()
             {
-           
-                koboldHealth = koboldHealth - playerdamage;
-                if (koboldHealth < 80)
+                if (koboldHealth > 0)
             {
                 koboldHealth = koboldHealth - playerdamage;
-                 if   (koboldHealth < 0)
-                {
-                    kobolds = 0;
+              
+        
                     level = 2;
                     Chieftain = Chieftain - playerdamage;
 
-                    Console.WriteLine("you swing your blade slashing your enemy dealing   " + playerdamage + "  Damage");
-                    Console.WriteLine("There are none that remain");
+                    Console.WriteLine("whack for   " + playerdamage + "  Damage");
                     Console.Clear(); }
 
-            }
+            
 
 
         }
         static void Main(string[] args)
         {
-           
-
-            
-
-
-            
-            
-            Console.WriteLine("You've taken the initiative, 8 Kobolds stand before you.");
+           Console.WriteLine("You've taken the initiative, 8 Kobolds stand before you.");
             Console.ReadKey(true);
             Console.Clear();
             while (kobolds > 0)
@@ -138,22 +118,6 @@ namespace GameHud
                 GameHud();
             }
            
-           
-          
-            Console.WriteLine("                                                    Level 1: Burrows Complete, Score:");
-            Console.ReadKey(true);
-            Console.Clear();
-            Console.WriteLine();
-            Console.WriteLine();
-            Console.WriteLine("Remaining Health");
-            Console.WriteLine(health);
-            Console.WriteLine("Remaining shields");
-            Console.WriteLine(shields);
-            Console.WriteLine("Remaining Lives");
-            Console.WriteLine(lives);
-            Console.WriteLine();
-            Console.Clear();
-
             Console.WriteLine("                                                         WELCOME TO LEVEL 2                           ");
             health = health + 100;
             shields = 50;
@@ -189,7 +153,8 @@ namespace GameHud
 
 
 
-
+            // let's review, static void = method (a method is an enclosed system which can optionally take input and store a series of commands 
+            //within one string that can be called upon at a later point rather than retyping everything 
 
 
 
